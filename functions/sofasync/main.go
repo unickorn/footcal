@@ -24,10 +24,7 @@ func Main(Context openruntimes.Context) openruntimes.Response {
 	db := NewDB(databases)
 
 	// Fetch all teams.
-	docs, err := databases.ListDocuments(os.Getenv("APPWRITE_DB_ID"), "teams",
-		databases.WithListDocumentsQueries([]string{
-			"{\"method\":\"select\",\"values\":[]}",
-		}))
+	docs, err := databases.ListDocuments(os.Getenv("APPWRITE_DB_ID"), "teams")
 	if err != nil {
 		Context.Error(err)
 		return Context.Res.Empty()
