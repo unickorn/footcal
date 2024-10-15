@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"openruntimes/handler/sofa"
 	"os"
+	"strconv"
 
 	"github.com/appwrite/sdk-for-go/appwrite"
 	"github.com/open-runtimes/types-for-go/v4/openruntimes"
@@ -26,32 +27,31 @@ func Main(Context openruntimes.Context) openruntimes.Response {
 	type team struct {
 		ID uint64 `json:"id"`
 	}
-	docs, err := databases.ListDocuments(os.Getenv("APPWRITE_DB_ID"), "teams", 
-		databases.WithListDocumentsQueries([]string {
-			"{\"method\":\"select\",\"values\":[\"id\"]}",
+	docs, err := databases.ListDocuments(os.Getenv("APPWRITE_DB_ID"), "teams",
+		databases.WithListDocumentsQueries([]string{
+			"{\"method\":\"select\",\"values\":[]}",
 		}))
 	if err != nil {
 		Context.Error(err)
 		return Context.Res.Empty()
 	}
 
+	var sum int
 	for _, d := range docs.Documents {
-		var t team
-
-		err = d.Decode(&t)
+		id, err := strconv.ParseUint(d.Id, 10, 64)
 		if err != nil {
-			Context.Error(err)
-			return Context.Res.Empty()
+			Context.Error("Failed to parse team ID", d.Id)
+			return Context.Res.Text("Error")
 		}
-
 		// Fetch all events of the team, saving ones that cannot be found.
-		matches, err := sofa.CollectMatches(db, t.ID)
+		matches, err := sofa.CollectMatches(db, id)
 		if err != nil {
 			fmt.Println(err.Error())
 			continue
 		}
-		fmt.Printf("Collected %d matches for team %d\n", len(matches), t.ID)
+		fmt.Printf("Collected %d matches for team %s\n", len(matches), d.Id)
+		sum += len(matches)
 	}
 
-	return Context.Res.Text("Pong")
+	return Context.Res.Text(fmt.Sprintf("Collected or refreshed %d matches.", sum))
 }
