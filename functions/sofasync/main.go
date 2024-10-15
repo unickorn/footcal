@@ -1,51 +1,57 @@
 package handler
 
 import (
+	"fmt"
+	"openruntimes/handler/sofa"
 	"os"
-	"strconv"
 
 	"github.com/appwrite/sdk-for-go/appwrite"
 	"github.com/open-runtimes/types-for-go/v4/openruntimes"
 )
 
-type Response struct {
-	Motto       string `json:"motto"`
-	Learn       string `json:"learn"`
-	Connect     string `json:"connect"`
-	GetInspired string `json:"getInspired"`
-}
+const DB_NAME = "sofadata"
 
-// This Appwrite function will be executed every time your function is triggered
 func Main(Context openruntimes.Context) openruntimes.Response {
-	// You can use the Appwrite SDK to interact with other services
-	// For this example, we're using the Users service
 	client := appwrite.NewClient(
-		appwrite.WithEndpoint(os.Getenv("APPWRITE_FUNCTION_API_ENDPOINT")),
-		appwrite.WithProject(os.Getenv("APPWRITE_FUNCTION_PROJECT_ID")),
-		appwrite.WithKey(Context.Req.Headers["x-appwrite-key"]),
+		appwrite.WithEndpoint(os.Getenv("APPWRITE_API_ENDPOINT")),
+		appwrite.WithProject(os.Getenv("APPWRITE_PROJECT_ID")),
+		appwrite.WithKey(os.Getenv("APPWRITE_SECRET_API_KEY")),
 	)
-	users := appwrite.NewUsers(client)
+	databases := appwrite.NewDatabases(client)
 
-	response, err := users.List()
+	// Create new DB.
+	db := NewDB(databases)
+
+	// Fetch all teams.
+	type team struct {
+		ID uint64 `json:"id"`
+	}
+	docs, err := databases.ListDocuments(os.Getenv("APPWRITE_DB_ID"), "teams", 
+		databases.WithListDocumentsQueries([]string {
+			"{\"method\":\"select\",\"values\":[\"id\"]}",
+		}))
 	if err != nil {
-		Context.Error("Could not list users: " + err.Error())
-	} else {
-		// Log messages and errors to the Appwrite Console
-		// These logs won't be seen by your end users
-		Context.Log("Total users: " + strconv.Itoa(response.Total))
+		Context.Error(err)
+		return Context.Res.Empty()
 	}
 
-	// The req object contains the request data
-	if Context.Req.Path == "/ping" {
-		// Use res object to respond with text(), json(), or binary()
-		// Don't forget to return a response!
-		return Context.Res.Text("Pong")
+	for _, d := range docs.Documents {
+		var t team
+
+		err = d.Decode(&t)
+		if err != nil {
+			Context.Error(err)
+			return Context.Res.Empty()
+		}
+
+		// Fetch all events of the team, saving ones that cannot be found.
+		matches, err := sofa.CollectMatches(db, t.ID)
+		if err != nil {
+			fmt.Println(err.Error())
+			continue
+		}
+		fmt.Printf("Collected %d matches for team %d\n", len(matches), t.ID)
 	}
 
-	return Context.Res.Json(Response{
-		Motto:       "Build like a team of hundreds_",
-		Learn:       "https://appwrite.io/docs",
-		Connect:     "https://appwrite.io/discord",
-		GetInspired: "https://builtwith.appwrite.io",
-	})
+	return Context.Res.Text("Pong")
 }
