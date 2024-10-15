@@ -24,9 +24,6 @@ func Main(Context openruntimes.Context) openruntimes.Response {
 	db := NewDB(databases)
 
 	// Fetch all teams.
-	type team struct {
-		ID uint64 `json:"id"`
-	}
 	docs, err := databases.ListDocuments(os.Getenv("APPWRITE_DB_ID"), "teams",
 		databases.WithListDocumentsQueries([]string{
 			"{\"method\":\"select\",\"values\":[]}",
@@ -40,16 +37,16 @@ func Main(Context openruntimes.Context) openruntimes.Response {
 	for _, d := range docs.Documents {
 		id, err := strconv.ParseUint(d.Id, 10, 64)
 		if err != nil {
-			Context.Error("Failed to parse team ID", d.Id)
+			Context.Error(fmt.Sprintf("Failed to parse team ID %s", d.Id))
 			return Context.Res.Text("Error")
 		}
 		// Fetch all events of the team, saving ones that cannot be found.
 		matches, err := sofa.CollectMatches(db, id)
 		if err != nil {
-			fmt.Println(err.Error())
+			Context.Log(err.Error())
 			continue
 		}
-		fmt.Printf("Collected %d matches for team %s\n", len(matches), d.Id)
+		Context.Log(fmt.Sprintf("Collected %d matches for team %s\n", len(matches), d.Id))
 		sum += len(matches)
 	}
 
