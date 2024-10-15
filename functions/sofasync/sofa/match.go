@@ -8,17 +8,17 @@ import (
 // Match is a struct containing information about a match.
 type Match struct {
 	// ID is the ID of the event in SofaScore.
-	ID int64
+	ID int64 `json:"id"`
 	// Tournament is the name of the tournament this match finds place in.
-	Tournament string
+	Tournament string `json:"tournament"`
 	// HomeTeam is the name of the home team.
-	HomeTeam string
+	HomeTeam string `json:"home_team"`
 	// AwayTeam is the name of the away team.
-	AwayTeam string
+	AwayTeam string `json:"away_team"`
 	// StartTime is the time the match will start.
-	StartTime time.Time
+	StartTime time.Time `json:"start_time"`
 	// Location is the location the match will find place in.
-	Location string
+	Location string `json:"location"`
 }
 
 // CollectMatches collects matches for a given team, using the db as a cache to prevent
