@@ -1,16 +1,15 @@
-package handler
+package main
 
 import (
 	"fmt"
 	"os"
 	"strconv"
 
-	"github.com/unickorn/footcal/sofa"
 	"github.com/appwrite/sdk-for-go/appwrite"
-	"github.com/open-runtimes/types-for-go/v4/openruntimes"
+	"github.com/unickorn/footcal/sofa"
 )
 
-func Main(Context openruntimes.Context) openruntimes.Response {
+func main() {
 	client := appwrite.NewClient(
 		appwrite.WithEndpoint(os.Getenv("APPWRITE_API_ENDPOINT")),
 		appwrite.WithProject(os.Getenv("APPWRITE_PROJECT_ID")),
@@ -19,31 +18,32 @@ func Main(Context openruntimes.Context) openruntimes.Response {
 	databases := appwrite.NewDatabases(client)
 
 	// Create new DB.
-	db := NewDB(databases)
+	db := DB{}
 
 	// Fetch all teams.
 	docs, err := databases.ListDocuments(os.Getenv("APPWRITE_DB_ID"), "teams")
 	if err != nil {
-		Context.Error(err)
-		return Context.Res.Empty()
+		fmt.Println(err)
+		return
 	}
 
 	var sum int
 	for _, d := range docs.Documents {
 		id, err := strconv.ParseUint(d.Id, 10, 64)
 		if err != nil {
-			Context.Error(fmt.Sprintf("Failed to parse team ID %s", d.Id))
-			return Context.Res.Text("Error")
+			fmt.Println(fmt.Sprintf("Failed to parse team ID %s", d.Id))
+			return
 		}
 		// Fetch all events of the team, saving ones that cannot be found.
 		matches, err := sofa.CollectMatches(db, id)
 		if err != nil {
-			Context.Log(err.Error())
+			fmt.Println(err.Error())
 			continue
 		}
-		Context.Log(fmt.Sprintf("Collected %d matches for team %s\n", len(matches), d.Id))
+		fmt.Println(matches)
+		fmt.Println(fmt.Sprintf("Collected %d matches for team %s\n", len(matches), d.Id))
 		sum += len(matches)
 	}
 
-	return Context.Res.Text(fmt.Sprintf("Collected or refreshed %d matches.", sum))
+	fmt.Println(fmt.Sprintf("Collected or refreshed %d matches.", sum))
 }

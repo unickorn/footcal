@@ -1,11 +1,10 @@
 package handler
 
 import (
-	"fmt"
-	"openruntimes/handler/sofa"
 	"os"
 	"strconv"
 
+	"github.com/unickorn/footcal/sofa"
 	"github.com/appwrite/sdk-for-go/databases"
 )
 
@@ -25,19 +24,15 @@ func NewDB(dbs *databases.Databases) *DB {
 func (db *DB) FindMatch(id int64) (sofa.Match, bool) {
 	doc, err := db.db.GetDocument(os.Getenv("APPWRITE_DB_ID"), "matches", strconv.Itoa(int(id)))
 	if err != nil {
-		fmt.Println(err.Error())
 		return sofa.Match{}, false
 	}
 
 	var match sofa.Match
 	err = doc.Decode(&match)
 	if err != nil {
-		fmt.Println(err.Error())
 		return sofa.Match{}, false
 	}
 
-	fmt.Println("match found !")
-	fmt.Println(match)
 	return match, true
 }
 

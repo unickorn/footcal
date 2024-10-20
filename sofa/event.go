@@ -72,10 +72,12 @@ func getEvent(id int64) (event, error) {
 	}
 	defer rsp.Body.Close()
 
-	var ev event
+	var ev struct {
+		Event event `json:"event"`
+	}
 	err = json.NewDecoder(rsp.Body).Decode(&ev)
 	if err != nil {
 		return event{}, err
 	}
-	return ev, nil
+	return ev.Event, nil
 }
