@@ -47,7 +47,7 @@ func CollectMatches(db Database, team uint64) ([]Match, error) {
 
 		err = db.SaveMatch(m)
 		if err != nil {
-			fmt.Printf("Failed to save match to database: %s", err.Error())
+			return nil, err
 		}
 	}
 	return matches, nil
