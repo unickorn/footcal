@@ -1,22 +1,26 @@
 package handler
 
 import (
+	"fmt"
 	"os"
 	"strconv"
 
-	"github.com/unickorn/footcal/sofa"
 	"github.com/appwrite/sdk-for-go/databases"
+	"github.com/open-runtimes/types-for-go/v4/openruntimes"
+	"github.com/unickorn/footcal/sofa"
 )
 
 // DB is a wrapper around the appwrite database client.
 type DB struct {
 	db *databases.Databases
+	ctx openruntimes.Context
 }
 
 // NewDB creates a new DB from an appwrite database client.
-func NewDB(dbs *databases.Databases) *DB {
+func NewDB(dbs *databases.Databases, ctx openruntimes.Context) *DB {
 	return &DB{
 		db: dbs,
+		ctx: ctx,
 	}
 }
 
@@ -33,11 +37,13 @@ func (db *DB) FindMatch(id int64) (sofa.Match, bool) {
 		return sofa.Match{}, false
 	}
 
+	db.ctx.Log(fmt.Sprintf("Found match: %v\n", match))
 	return match, true
 }
 
 // SaveMatch saves a match to the appwrite database.
 func (db *DB) SaveMatch(m sofa.Match) error {
-	_, err := db.db.CreateDocument(os.Getenv("APPWRITE_DB_ID"), "matches", strconv.Itoa(int(m.ID)), m)
+	saved, err := db.db.CreateDocument(os.Getenv("APPWRITE_DB_ID"), "matches", strconv.Itoa(int(m.ID)), m)
+	db.ctx.Log(fmt.Sprintf("Saved match: %v -> %v\n", m, saved))
 	return err
 }

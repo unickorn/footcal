@@ -19,7 +19,7 @@ func Main(Context openruntimes.Context) openruntimes.Response {
 	databases := appwrite.NewDatabases(client)
 
 	// Create new DB.
-	db := NewDB(databases)
+	db := NewDB(databases, Context)
 
 	// Fetch all teams.
 	docs, err := databases.ListDocuments(os.Getenv("APPWRITE_DB_ID"), "teams")
