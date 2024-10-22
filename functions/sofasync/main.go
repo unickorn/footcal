@@ -4,22 +4,42 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"time"
 
-	"github.com/unickorn/footcal/sofa"
 	"github.com/appwrite/sdk-for-go/appwrite"
 	"github.com/open-runtimes/types-for-go/v4/openruntimes"
+	"github.com/unickorn/footcal/sofa"
 )
 
 func Main(Context openruntimes.Context) openruntimes.Response {
 	client := appwrite.NewClient(
-		appwrite.WithEndpoint(os.Getenv("APPWRITE_API_ENDPOINT")),
 		appwrite.WithProject(os.Getenv("APPWRITE_PROJECT_ID")),
-		appwrite.WithKey(os.Getenv("APPWRITE_FUNCTION_API_KEY")),
+		appwrite.WithKey(Context.Req.Headers["x-appwrite-key"]),
 	)
 	databases := appwrite.NewDatabases(client)
 
 	// Create new DB.
 	db := NewDB(databases, Context)
+
+	// Create a test document.
+	doc, err := databases.CreateDocument(
+		"sofadata",
+		"matches",
+		"32",
+		sofa.Match{
+			ID: 32,
+			Tournament:"Test Tournament",
+			HomeTeam: "Test Home Team",
+			AwayTeam: "Test Away Team",
+			StartTime: time.Now(),
+			Location: "Turkiye",
+		},
+	)
+	if err != nil {
+		Context.Error(err.Error())
+		return Context.Res.Text(err.Error())
+	}
+	Context.Log(fmt.Sprintf("Added test doc: %v", doc.Id))
 
 	// Fetch all teams.
 	docs, err := databases.ListDocuments(os.Getenv("APPWRITE_DB_ID"), "teams")

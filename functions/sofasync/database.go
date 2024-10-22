@@ -34,6 +34,7 @@ func (db *DB) FindMatch(id int64) (sofa.Match, bool) {
 	var match sofa.Match
 	err = doc.Decode(&match)
 	if err != nil {
+		db.ctx.Error(fmt.Sprintf("Failed to decode match: %s\n", err.Error()))
 		return sofa.Match{}, false
 	}
 
