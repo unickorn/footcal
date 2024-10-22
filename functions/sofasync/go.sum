@@ -2,3 +2,5 @@ github.com/appwrite/sdk-for-go v0.2.0 h1:37rQFsq3rELRxYu/YHAatVLLDYfxAAM5ya2tvGu
 github.com/appwrite/sdk-for-go v0.2.0/go.mod h1:aFiOAbfOzGS3811eMCt3T9WDBvjvPVAfOjw10Vghi4E=
 github.com/open-runtimes/types-for-go/v4 v4.0.7 h1:yIkdY8Q1438mVBgCO77pKLXfD2UOsMga5H0VVeMXEO8=
 github.com/open-runtimes/types-for-go/v4 v4.0.7/go.mod h1:L6N4mNQFedFSlX5hOKmtjUTZdqD691YZlVtXOxC5DSw=
+github.com/unickorn/footcal/sofa v0.0.0-20241022101456-283d7d7e0360 h1:c0S4n3nM9OPfOQzrQe+JS5LVYYqhpF89KAuKt3tv+G0=
+github.com/unickorn/footcal/sofa v0.0.0-20241022101456-283d7d7e0360/go.mod h1:ZqhJt8OOq/xcPZFdPgHGziFLItYuzQE8of4rY2mjzAw=
