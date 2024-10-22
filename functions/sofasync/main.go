@@ -20,9 +20,6 @@ func Main(Context openruntimes.Context) openruntimes.Response {
 	// Create new DB.
 	db := NewDB(databases, Context)
 
-	// Create a test document.
-	Context.Log(fmt.Sprintf("DB ID:", os.Getenv("APPWRITE_DB_ID")))
-
 	// Fetch all teams.
 	docs, err := databases.ListDocuments(os.Getenv("APPWRITE_DB_ID"), "teams")
 	if err != nil {
