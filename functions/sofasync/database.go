@@ -44,7 +44,9 @@ func (db *DB) FindMatch(id int64) (sofa.Match, bool) {
 
 // SaveMatch saves a match to the appwrite database.
 func (db *DB) SaveMatch(m sofa.Match) error {
+	db.ctx.Log(fmt.Sprintf("Saving to DB ID:", os.Getenv("APPWRITE_DB_ID")))
+
 	saved, err := db.db.CreateDocument(os.Getenv("APPWRITE_DB_ID"), "matches", strconv.Itoa(int(m.ID)), m)
-	db.ctx.Log(fmt.Sprintf("Saved match: %v -> %v\n", m, saved))
+	db.ctx.Log(fmt.Sprintf("Saved match: %v -> %v\n", m, saved.Id))
 	return err
 }

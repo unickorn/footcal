@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 	"strconv"
-	"time"
 
 	"github.com/appwrite/sdk-for-go/appwrite"
 	"github.com/open-runtimes/types-for-go/v4/openruntimes"
@@ -22,24 +21,7 @@ func Main(Context openruntimes.Context) openruntimes.Response {
 	db := NewDB(databases, Context)
 
 	// Create a test document.
-	doc, err := databases.CreateDocument(
-		"sofadata",
-		"matches",
-		"32",
-		sofa.Match{
-			ID: 32,
-			Tournament:"Test Tournament",
-			HomeTeam: "Test Home Team",
-			AwayTeam: "Test Away Team",
-			StartTime: time.Now(),
-			Location: "Turkiye",
-		},
-	)
-	if err != nil {
-		Context.Error(err.Error())
-		return Context.Res.Text(err.Error())
-	}
-	Context.Log(fmt.Sprintf("Added test doc: %v", doc.Id))
+	Context.Log(fmt.Sprintf("DB ID:", os.Getenv("APPWRITE_DB_ID")))
 
 	// Fetch all teams.
 	docs, err := databases.ListDocuments(os.Getenv("APPWRITE_DB_ID"), "teams")

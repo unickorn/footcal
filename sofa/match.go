@@ -1,7 +1,6 @@
 package sofa
 
 import (
-	"fmt"
 	"time"
 )
 

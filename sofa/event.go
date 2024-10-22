@@ -32,6 +32,7 @@ type event struct {
 
 func (ev event) toMatch() Match {
 	return Match{
+		ID:         ev.ID,
 		Tournament: ev.Tournament.Name,
 		HomeTeam:   ev.HomeTeam.Name,
 		AwayTeam:   ev.AwayTeam.Name,
