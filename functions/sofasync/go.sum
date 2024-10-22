@@ -4,3 +4,5 @@ github.com/open-runtimes/types-for-go/v4 v4.0.7 h1:yIkdY8Q1438mVBgCO77pKLXfD2UOs
 github.com/open-runtimes/types-for-go/v4 v4.0.7/go.mod h1:L6N4mNQFedFSlX5hOKmtjUTZdqD691YZlVtXOxC5DSw=
 github.com/unickorn/footcal/sofa v0.0.0-20241022101456-283d7d7e0360 h1:c0S4n3nM9OPfOQzrQe+JS5LVYYqhpF89KAuKt3tv+G0=
 github.com/unickorn/footcal/sofa v0.0.0-20241022101456-283d7d7e0360/go.mod h1:ZqhJt8OOq/xcPZFdPgHGziFLItYuzQE8of4rY2mjzAw=
+github.com/unickorn/footcal/sofa v0.0.0-20241022104116-1c7d2f818f99 h1:Bu6I7FGv1GEbzyHX46w1aElpos9Htn3dG4QBTGQj3tA=
+github.com/unickorn/footcal/sofa v0.0.0-20241022104116-1c7d2f818f99/go.mod h1:ZqhJt8OOq/xcPZFdPgHGziFLItYuzQE8of4rY2mjzAw=
