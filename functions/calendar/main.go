@@ -22,6 +22,7 @@ func Main(Context openruntimes.Context) openruntimes.Response {
 	databases := appwrite.NewDatabases(client)
 
 	if Context.Req.Method == "GET" {
+		Context.Log(fmt.Sprintf("%#+v", Context.Req.Query))
 		teams, ok := Context.Req.Query["teams"]
 		if !ok {
 			Context.Error("No teams specified!")
