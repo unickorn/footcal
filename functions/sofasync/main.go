@@ -23,7 +23,7 @@ func Main(Context openruntimes.Context) openruntimes.Response {
 	// Fetch all teams.
 	docs, err := databases.ListDocuments(os.Getenv("APPWRITE_DB_ID"), "teams")
 	if err != nil {
-		Context.Error(err)
+		Context.Error("Error fetching all teams: " + err.Error())
 		return Context.Res.Empty()
 	}
 
@@ -37,7 +37,7 @@ func Main(Context openruntimes.Context) openruntimes.Response {
 		// Fetch all events of the team, saving ones that cannot be found.
 		matches, err := sofa.CollectMatches(db, id)
 		if err != nil {
-			Context.Log(err.Error())
+			Context.Log("Failed to collect matches: " + err.Error())
 			continue
 		}
 		Context.Log(fmt.Sprintf("Collected %d matches for team %s\n", len(matches), d.Id))
