@@ -70,6 +70,7 @@ func Main(Context openruntimes.Context) openruntimes.Response {
 			}
 
 			var matchesForTeam []sofa.Match
+			Context.Log(list)
 			err = list.Decode(&matchesForTeam)
 			if err != nil {
 				Context.Error(err.Error())
