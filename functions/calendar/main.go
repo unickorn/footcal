@@ -72,8 +72,8 @@ func Main(Context openruntimes.Context) openruntimes.Response {
 
 			type SubList struct {
 				*models.DocumentList
-				 Documents []sofa.Match `json:"documents"`
-			 }
+				Documents []sofa.Match `json:"documents"`
+			}
 			var sublist SubList
 			err = list.Decode(&sublist)
 			if err != nil {

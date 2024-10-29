@@ -6,3 +6,5 @@ github.com/unickorn/footcal/sofa v0.0.0-20241022101456-283d7d7e0360 h1:c0S4n3nM9
 github.com/unickorn/footcal/sofa v0.0.0-20241022101456-283d7d7e0360/go.mod h1:ZqhJt8OOq/xcPZFdPgHGziFLItYuzQE8of4rY2mjzAw=
 github.com/unickorn/footcal/sofa v0.0.0-20241022104116-1c7d2f818f99 h1:Bu6I7FGv1GEbzyHX46w1aElpos9Htn3dG4QBTGQj3tA=
 github.com/unickorn/footcal/sofa v0.0.0-20241022104116-1c7d2f818f99/go.mod h1:ZqhJt8OOq/xcPZFdPgHGziFLItYuzQE8of4rY2mjzAw=
+github.com/unickorn/footcal/sofa v0.0.0-20241029115017-4ad91f5b0f4b h1:WNaSa+XYjIesqTvxeXgfb91QRXeC36JLFPxfQE2ZxkA=
+github.com/unickorn/footcal/sofa v0.0.0-20241029115017-4ad91f5b0f4b/go.mod h1:ZqhJt8OOq/xcPZFdPgHGziFLItYuzQE8of4rY2mjzAw=

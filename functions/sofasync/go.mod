@@ -7,4 +7,4 @@ require (
 	github.com/open-runtimes/types-for-go/v4 v4.0.7
 )
 
-require github.com/unickorn/footcal/sofa v0.0.0-20241022104116-1c7d2f818f99
+require github.com/unickorn/footcal/sofa v0.0.0-20241029115017-4ad91f5b0f4b
