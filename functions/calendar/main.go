@@ -2,7 +2,6 @@ package handler
 
 import (
 	"fmt"
-	"net/http"
 	"os"
 	"strconv"
 	"strings"
@@ -23,13 +22,14 @@ func Main(Context openruntimes.Context) openruntimes.Response {
 
 	if Context.Req.Method == "GET" {
 		Context.Log(fmt.Sprintf("%#+v", Context.Req.Query))
-		teams, ok := Context.Req.Query["teamlist"]
-		if !ok {
-			Context.Error("No teams specified!")
-			return Context.Res.Text("No teams specified!",
-				Context.Res.WithStatusCode(http.StatusBadRequest))
-		}
+		// teams, ok := Context.Req.Query["teamlist"]
+		// if !ok {
+		// 	Context.Error("No teams specified!")
+		// 	return Context.Res.Text("No teams specified!",
+		// 		Context.Res.WithStatusCode(http.StatusBadRequest))
+		// }
 
+		teams := "3052"
 		// Parse teams.
 		teamsSplitted := strings.Split(teams, ",")
 
@@ -99,8 +99,8 @@ func Main(Context openruntimes.Context) openruntimes.Response {
 		}
 		data := cal.Serialize()
 		// Return the calendar.
-		return Context.Res.Binary([]byte(data), Context.Res.WithHeaders(map[string]string {
-			"Content-Type": "text/calendar",
+		return Context.Res.Binary([]byte(data), Context.Res.WithHeaders(map[string]string{
+			"Content-Type":        "text/calendar",
 			"Content-Disposition": "attachment; filename=calendar.ics",
 		}))
 	}
