@@ -45,17 +45,17 @@ func Main(Context openruntimes.Context) openruntimes.Response {
 			}
 
 			// Get team names from DB:
-			Context.Log("Getting db " + os.Getenv("APPWRITE_DB_NAME") + " table teams with ID " + t)
+			Context.Log("Getting db " + os.Getenv("APPWRITE_DB_ID") + " table teams with ID " + t)
 
-			docs, err := databases.ListDocuments(os.Getenv("APPWRITE_DB_NAME"), "teams")
-			if err != nil {
+			docs, err := databases.ListDocuments(os.Getenv("APPWRITE_DB_ID"), "teams")
+			if err != nil 
 				Context.Error(err.Error())
 				return Context.Res.Text("Error getting team names for team " + t + ": " + err.Error())
 			}
 			for _, d := range docs.Documents {
 				Context.Log(fmt.Sprint("Doc found with ID: %#+v", d.Id))
 			}
-			doc, err := databases.GetDocument(os.Getenv("APPWRITE_DB_NAME"), "teams", t)
+			doc, err := databases.GetDocument(os.Getenv("APPWRITE_DB_ID"), "teams", t)
 			if err != nil {
 				Context.Error(err.Error())
 				return Context.Res.Text("Error getting team names for team " + t + ": " + err.Error())
@@ -73,7 +73,7 @@ func Main(Context openruntimes.Context) openruntimes.Response {
 			// Get matches from team name now.
 			name := t.Name
 
-			list, err := databases.ListDocuments(os.Getenv("APPWRITE_DB_NAME"), "matches", databases.WithListDocumentsQueries(
+			list, err := databases.ListDocuments(os.Getenv("APPWRITE_DB_ID"), "matches", databases.WithListDocumentsQueries(
 				[]string{
 					Or([]string{Equal("home_team", name), Equal("away_team", name)}),
 				},
