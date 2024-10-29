@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/appwrite/sdk-for-go/appwrite"
+	"github.com/appwrite/sdk-for-go/models"
 	ics "github.com/arran4/golang-ical"
 	"github.com/open-runtimes/types-for-go/v4/openruntimes"
 	"github.com/unickorn/footcal/sofa"
@@ -69,14 +70,17 @@ func Main(Context openruntimes.Context) openruntimes.Response {
 				return Context.Res.Text("Error getting matches from team name:" + err.Error())
 			}
 
-			var matchesForTeam []sofa.Match
-			Context.Log(list)
-			err = list.Decode(&matchesForTeam)
+			type SubList struct {
+				*models.DocumentList
+				 Documents []sofa.Match `json:"documents"`
+			 }
+			var sublist SubList
+			err = list.Decode(&sublist)
 			if err != nil {
 				Context.Error(err.Error())
 				return Context.Res.Text("Error decoding listed matches: " + err.Error())
 			}
-			matches = append(matches, matchesForTeam...)
+			matches = append(matches, sublist.Documents...)
 		}
 
 		// Convert all collected matches to event and add to calendar.
