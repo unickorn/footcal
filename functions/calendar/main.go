@@ -69,17 +69,13 @@ func Main(Context openruntimes.Context) openruntimes.Response {
 				return Context.Res.Text("Error getting matches from team name:" + err.Error())
 			}
 
-			for _, m := range list.Documents {
-				var match sofa.Match
-				Context.Log(m)
-				err = m.Decode(&match)
-				if err != nil {
-					Context.Error(err.Error())
-					return Context.Res.Text("Error decoding listed matches: " + err.Error())
-				}
-
-				matches = append(matches, match)
+			var matchesForTeam []sofa.Match
+			err = list.Decode(&matchesForTeam)
+			if err != nil {
+				Context.Error(err.Error())
+				return Context.Res.Text("Error decoding listed matches: " + err.Error())
 			}
+			matches = append(matches, matchesForTeam...)
 		}
 
 		// Convert all collected matches to event and add to calendar.
