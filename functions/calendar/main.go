@@ -47,7 +47,7 @@ func Main(Context openruntimes.Context) openruntimes.Response {
 			doc, err := databases.GetDocument(os.Getenv("APPWRITE_DB_NAME"), "teams", t)
 			if err != nil {
 				Context.Error(err.Error())
-				return Context.Res.Text(err.Error())
+				return Context.Res.Text("Error getting team names: " + err.Error())
 			}
 			type team struct {
 				Name string `json:"name"`
@@ -56,7 +56,7 @@ func Main(Context openruntimes.Context) openruntimes.Response {
 			err = doc.Decode(&t)
 			if err != nil {
 				Context.Error(err.Error())
-				return Context.Res.Text(err.Error())
+				return Context.Res.Text("Error decoding teams: " + err.Error())
 			}
 
 			// Get matches from team name now.
@@ -69,7 +69,7 @@ func Main(Context openruntimes.Context) openruntimes.Response {
 			))
 			if err != nil {
 				Context.Error(err.Error())
-				return Context.Res.Text(err.Error())
+				return Context.Res.Text("Error getting matches from team name:" + err.Error())
 			}
 
 			for _, m := range list.Documents {
@@ -77,7 +77,7 @@ func Main(Context openruntimes.Context) openruntimes.Response {
 				err = m.Decode(&match)
 				if err != nil {
 					Context.Error(err.Error())
-					return Context.Res.Text(err.Error())
+					return Context.Res.Text("Error decoding listed matches: " + err.Error())
 				}
 
 				matches = append(matches, match)
@@ -99,8 +99,8 @@ func Main(Context openruntimes.Context) openruntimes.Response {
 		}
 		data := cal.Serialize()
 		// Return the calendar.
-		return Context.Res.Binary([]byte(data), Context.Res.WithHeaders(map[string]string{
-			"Content-Type":        "text/calendar",
+		return Context.Res.Binary([]byte(data), Context.Res.WithHeaders(map[string]string {
+			"Content-Type": "text/calendar",
 			"Content-Disposition": "attachment; filename=calendar.ics",
 		}))
 	}
