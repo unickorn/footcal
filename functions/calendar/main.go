@@ -23,7 +23,7 @@ func Main(Context openruntimes.Context) openruntimes.Response {
 
 	if Context.Req.Method == "GET" {
 		Context.Log(fmt.Sprintf("%#+v", Context.Req.Query))
-		teams, ok := Context.Req.Query["teams"]
+		teams, ok := Context.Req.Query["teamlist"]
 		if !ok {
 			Context.Error("No teams specified!")
 			return Context.Res.Text("No teams specified!",
