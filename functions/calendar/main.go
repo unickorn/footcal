@@ -45,16 +45,6 @@ func Main(Context openruntimes.Context) openruntimes.Response {
 			}
 
 			// Get team names from DB:
-			Context.Log("Getting db " + os.Getenv("APPWRITE_DB_ID") + " table teams with ID " + t)
-
-			docs, err := databases.ListDocuments(os.Getenv("APPWRITE_DB_ID"), "teams")
-			if err != nil {
-				Context.Error(err.Error())
-				return Context.Res.Text("Error getting team names for team " + t + ": " + err.Error())
-			}
-			for _, d := range docs.Documents {
-				Context.Log(fmt.Sprintf("Doc found with ID: %#+v", d.Id))
-			}
 			doc, err := databases.GetDocument(os.Getenv("APPWRITE_DB_ID"), "teams", t)
 			if err != nil {
 				Context.Error(err.Error())
@@ -76,6 +66,8 @@ func Main(Context openruntimes.Context) openruntimes.Response {
 			list, err := databases.ListDocuments(os.Getenv("APPWRITE_DB_ID"), "matches", databases.WithListDocumentsQueries(
 				[]string{
 					Or([]string{Equal("home_team", name), Equal("away_team", name)}),
+					Limit(100),
+					Offset(0),
 				},
 			))
 			if err != nil {
@@ -85,6 +77,7 @@ func Main(Context openruntimes.Context) openruntimes.Response {
 
 			for _, m := range list.Documents {
 				var match sofa.Match
+				Context.Log(m)
 				err = m.Decode(&match)
 				if err != nil {
 					Context.Error(err.Error())
