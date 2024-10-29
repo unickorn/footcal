@@ -48,12 +48,12 @@ func Main(Context openruntimes.Context) openruntimes.Response {
 			Context.Log("Getting db " + os.Getenv("APPWRITE_DB_ID") + " table teams with ID " + t)
 
 			docs, err := databases.ListDocuments(os.Getenv("APPWRITE_DB_ID"), "teams")
-			if err != nil 
+			if err != nil {
 				Context.Error(err.Error())
 				return Context.Res.Text("Error getting team names for team " + t + ": " + err.Error())
 			}
 			for _, d := range docs.Documents {
-				Context.Log(fmt.Sprint("Doc found with ID: %#+v", d.Id))
+				Context.Log(fmt.Sprintf("Doc found with ID: %#+v", d.Id))
 			}
 			doc, err := databases.GetDocument(os.Getenv("APPWRITE_DB_ID"), "teams", t)
 			if err != nil {
