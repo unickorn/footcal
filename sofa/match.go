@@ -38,6 +38,7 @@ func CollectMatches(db Database, team uint64) ([]Match, error) {
 
 		ev, err := getEvent(id)
 		if err != nil {
+			
 			return nil, err
 		}
 		m = ev.toMatch()

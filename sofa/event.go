@@ -56,7 +56,9 @@ func getEventIDs(team uint64) ([]int64, error) {
 	}
 	err = json.NewDecoder(rsp.Body).Decode(&eventIDs)
 	if err != nil {
-		return nil, err
+		var b = make([]byte, 2048)
+		_, err = rsp.Body.Read(b)
+		return nil, fmt.Errorf("failed to decode json to get event IDs: %w, %s", err, string(b))
 	}
 	// Return the IDs.
 	var ids []int64
@@ -78,7 +80,9 @@ func getEvent(id int64) (event, error) {
 	}
 	err = json.NewDecoder(rsp.Body).Decode(&ev)
 	if err != nil {
-		return event{}, err
+		var b = make([]byte, 2048)
+		_, err = rsp.Body.Read(b)
+		return event{}, fmt.Errorf("failed to decode json to get event: %w, %s", err, string(b))
 	}
 	return ev.Event, nil
 }
