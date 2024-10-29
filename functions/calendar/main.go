@@ -61,15 +61,9 @@ func Main(Context openruntimes.Context) openruntimes.Response {
 			}
 
 			// Get matches from team name now.
-			name := t.Name
+			// name := t.Name
 
-			list, err := databases.ListDocuments(os.Getenv("APPWRITE_DB_ID"), "matches", databases.WithListDocumentsQueries(
-				[]string{
-					Or([]string{Equal("home_team", name), Equal("away_team", name)}),
-					Limit(100),
-					Offset(0),
-				},
-			))
+			list, err := databases.ListDocuments(os.Getenv("APPWRITE_DB_ID"), "matches")
 			if err != nil {
 				Context.Error(err.Error())
 				return Context.Res.Text("Error getting matches from team name:" + err.Error())
