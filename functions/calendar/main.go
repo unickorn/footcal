@@ -2,6 +2,7 @@ package handler
 
 import (
 	"fmt"
+	"net/http"
 	"os"
 	"strconv"
 	"strings"
@@ -22,14 +23,14 @@ func Main(Context openruntimes.Context) openruntimes.Response {
 
 	if Context.Req.Method == "GET" {
 		Context.Log(fmt.Sprintf("%#+v", Context.Req.Query))
-		// teams, ok := Context.Req.Query["teamlist"]
-		// if !ok {
-		// 	Context.Error("No teams specified!")
-		// 	return Context.Res.Text("No teams specified!",
-		// 		Context.Res.WithStatusCode(http.StatusBadRequest))
-		// }
+		teams, ok := Context.Req.Query["teamlist"]
+		if !ok {
+			Context.Error("No teams specified!")
+			return Context.Res.Text("No teams specified!",
+				Context.Res.WithStatusCode(http.StatusBadRequest))
+		}
 
-		teams := "3052"
+		// teams := "3052"
 		// Parse teams.
 		teamsSplitted := strings.Split(teams, ",")
 
@@ -40,14 +41,14 @@ func Main(Context openruntimes.Context) openruntimes.Response {
 			_, err := strconv.ParseUint(t, 10, 64)
 			if err != nil {
 				Context.Error(err.Error())
-				return Context.Res.Text(err.Error())
+				return Context.Res.Text("Error parsing uint: " + err.Error())
 			}
 
 			// Get team names from DB:
 			doc, err := databases.GetDocument(os.Getenv("APPWRITE_DB_NAME"), "teams", t)
 			if err != nil {
 				Context.Error(err.Error())
-				return Context.Res.Text("Error getting team names: " + err.Error())
+				return Context.Res.Text("Error getting team names for team " + t + ": " + err.Error())
 			}
 			type team struct {
 				Name string `json:"name"`
